@@ -1,670 +1,331 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Reprise du titre exact du document -->
-    <title>B0_M3_006_Le bon traitement de l'information</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bleu-nuit: #0F172A;
-            --bleu-fonce: #1E293B;
-            --bleu-moyen: #334155;
-            --bleu-clair: #3b82f6; /* Pour les accents */
-            --orange: #f97316;    /* Pour les accents */
-            --jaune: #eab308;     /* Pour les accents et sticky */
-            --vert: #22c55e;      /* Pour les accents */
-            --creme: #F3EFEA;
-            --ecru: #E2E8F0;
-            --sticky-bg: #fef9c3; /* Jaune très clair */
-            --sticky-text: #713f12; /* Brun foncé */
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bleu-nuit);
-            color: var(--ecru);
-        }
-        /* Style pour le titre avec dégradé */
-        .gradient-title {
-            background: linear-gradient(to right, var(--bleu-clair), var(--orange), var(--jaune));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            padding-bottom: 0.25rem; /* Espace sous le dégradé */
-            border-bottom: 2px solid var(--bleu-moyen); /* Ligne subtile sous le titre */
-            display: inline-block; /* Pour que la bordure s'ajuste */
-        }
-         /* Style Sticky Note */
-        .sticky-note {
-            background-color: var(--sticky-bg);
-            color: var(--sticky-text);
-            padding: 1.5rem;
-            border-radius: 1rem;
-            margin-bottom: 2rem;
-            border: 1px solid #fde047; /* Bordure jaune */
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.2);
-            transform: rotate(-1deg); /* Rotation légère */
-        }
-        .sticky-note h2 {
-            font-weight: 700;
-            font-size: 1.25rem;
-            margin-bottom: 1rem;
-            border-bottom: 1px dashed var(--sticky-text);
-            padding-bottom: 0.5rem;
-            color: var(--orange); /* Couleur pour le titre du sticky */
-        }
-        .sticky-note ul {
-            list-style-type: '📌 '; /* Punaise */
-            padding-left: 1.5rem;
-        }
-         .sticky-note li {
-            margin-bottom: 0.5rem;
-        }
-
-        .infographic-card {
-            background-color: var(--bleu-fonce);
-            border: 1px solid var(--bleu-moyen);
-            border-radius: 1.5rem;
-            transition: all 0.3s ease-in-out;
-            margin-bottom: 1.5rem; /* Espace entre les cartes */
-        }
-        .infographic-header {
-            cursor: pointer;
-            padding: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-radius: 1.5rem;
-        }
-        .infographic-header:hover {
-            background-color: var(--bleu-moyen);
-        }
-        .infographic-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
-            padding: 0 1.5rem;
-        }
-        .infographic-content.open {
-           padding-bottom: 1.5rem;
-        }
-        .icon {
-            transition: transform 0.3s ease-in-out;
-        }
-        .icon.open {
-            transform: rotate(180deg);
-        }
-        .rule-title {
-            font-weight: 700;
-            margin-bottom: 0.75rem; /* Plus d'espace */
-            font-size: 1.15rem; /* Légèrement plus grand */
-            border-bottom: 1px solid var(--bleu-moyen); /* Soulignement subtil */
-            padding-bottom: 0.5rem;
-        }
-        .rule-box {
-            background-color: var(--bleu-nuit);
-            padding: 1.25rem;
-            border-radius: 1rem;
-            margin-top: 1rem;
-            border-left: 5px solid; /* Bordure plus épaisse */
-        }
-        /* Couleurs pour les bordures et textes des sections */
-        .border-blue { border-color: var(--bleu-clair); }
-        .text-blue { color: var(--bleu-clair); }
-        .border-orange { border-color: var(--orange); }
-        .text-orange { color: var(--orange); }
-        .border-vert { border-color: var(--vert); }
-        .text-vert { color: var(--vert); }
-        .border-yellow { border-color: var(--jaune); }
-        .text-yellow { color: var(--jaune); }
-
-        /* Style des onglets (interprétation de "ongles civiques") */
-        .interactive-tab {
-            display: inline-block;
-            padding: 0.6rem 1.3rem; /* Légèrement plus grand */
-            border-radius: 9999px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-weight: 600;
-            background-color: var(--bleu-moyen);
-            color: #cbd5e1;
-            border: 1px solid var(--bleu-moyen);
-            margin-right: 0.5rem; /* Espace entre onglets */
-        }
-        .interactive-tab:hover {
-            background-color: #475569;
-            transform: translateY(-2px); /* Effet de survol */
-        }
-        .interactive-tab.active {
-            color: white;
-            border-color: currentColor; /* Bordure de la couleur active */
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3); /* Ombre légère */
-        }
-        .tab-panel {
-            display: none;
-            margin-top: 1.5rem;
-            animation: fadeIn 0.5s;
-        }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .tab-panel.active {
-            display: block;
-        }
-        .quiz-question {
-            background-color: var(--bleu-nuit);
-            padding: 1.25rem;
-            border-radius: 0.75rem;
-            margin-bottom: 1rem;
-            border: 1px solid var(--bleu-moyen);
-        }
-        .quiz-options label {
-            display: block;
-            background-color: var(--bleu-fonce);
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
-            margin-top: 0.5rem;
-            cursor: pointer;
-            border: 2px solid var(--bleu-fonce); /* Bordure initiale */
-            transition: border-color 0.2s, background-color 0.2s;
-        }
-        .quiz-options label:hover {
-            border-color: #475569;
-            background-color: var(--bleu-moyen);
-        }
-        .quiz-feedback {
-            margin-top: 0.75rem;
-            padding: 0.75rem; /* Plus de padding */
-            border-radius: 0.5rem;
-            font-size: 0.9rem;
-            font-weight: bold;
-            display: none;
-        }
-        .feedback-correct { background-color: rgba(34, 197, 94, 0.1); border-left: 4px solid var(--vert); color: var(--vert); display: block; }
-        .feedback-incorrect { background-color: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--rouge); color: var(--rouge); display: block; }
-        
-        .action-button {
-            color: white;
-            font-weight: bold;
-            padding: 0.8rem 1.6rem; /* Boutons plus grands */
-            border-radius: 0.75rem;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-        }
-         .action-button:hover {
-             transform: scale(1.03); /* Effet au survol */
-         }
-        textarea.atelier-input {
-             width: 100%;
-             min-height: 150px;
-             background-color: var(--bleu-moyen);
-             border: 1px solid #475569;
-             border-radius: 0.5rem;
-             padding: 1rem; /* Plus de padding */
-             color: var(--creme);
-             resize: vertical; /* Permet redimensionnement vertical */
-        }
-        /* Style pour la matrice Eisenhower */
-        .eisenhower-matrix {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem; /* Plus d'espace */
-            margin-top: 1.5rem;
-        }
-        .eisenhower-quadrant {
-            padding: 1.5rem; /* Plus de padding */
-            border-radius: 1rem; /* Bords plus arrondis */
-            border: 1px solid var(--bleu-moyen);
-        }
-         .eisenhower-quadrant h4 { margin-bottom: 0.75rem; font-size: 1.1rem;}
-         .eisenhower-quadrant p { line-height: 1.6; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paie_B1_M6_001_Comment_Et_Pourquoi_Se_Former_A_L_Edition_Et_Au_Controle_Des_Declarations_Sociales</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bleu-nuit:#0F172A; --bleu-fonce:#111827; --bleu:#3b82f6; --cyan:#06b6d4; --vert:#22c55e; --orange:#f59e0b; --rose:#ec4899; --rouge:#ef4444; --pale:#E2E8F0;
+    }
+    body{font-family:'Inter',sans-serif; background:linear-gradient(180deg,var(--bleu-nuit),#0b1226); color:var(--pale)}
+    .card{background:rgba(17,24,39,.8); border:1px solid #1f2937; border-radius:1.25rem; backdrop-filter: blur(6px); margin-bottom: 1.5rem;}
+    .hdr{cursor:pointer; padding:1.25rem; display:flex; align-items:center; justify-content:space-between; border-radius:1.25rem}
+    .hdr:hover{background:#0f172a}
+    .cnt{max-height:0; overflow:hidden; transition:max-height .5s ease, padding .5s ease; padding:0 1.25rem}
+    .cnt.open{padding-bottom:1.25rem}
+    .icon{transition:transform .3s ease}
+    .icon.open{transform:rotate(180deg)}
+    .box{background:#0b1226; border-left:4px solid var(--bleu); border-radius:.75rem; padding:1.25rem; margin-top:1rem;}
+    .q{background:#0b1226; border:1px solid #334155; border-radius:.75rem; padding:1.25rem; margin:1.5rem 0}
+    .btn{padding:.6rem 1.25rem; color:#0b1226; font-weight:800; border-radius:.75rem; transition: all .2s ease;}
+    .btn:hover{transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.2);}
+    .ok{display:none; margin-top:.75rem; padding:.75rem 1rem; border-radius:.5rem; font-weight:700}
+    .ok.good{display:block; background-color:#16a34a22; color:#22c55e}
+    .ok.bad{display:block; background-color:#ef444422; color:#ef4444}
+    .tbl{width:100%; border-collapse:separate; border-spacing:0; overflow:hidden; border-radius:.75rem; border:1px solid #1f2937; margin-top: 1rem;}
+    .tbl th,.tbl td{padding:.75rem 1rem; border-bottom:1px solid #1f2937}
+    .tbl tr:last-child td {border-bottom: none;}
+    .tbl th{background:#0b1226; text-align:left; color:#e2e8f0; font-weight: 600;}
+    .hint{font-size:.85rem; color:#94a3b8}
+    .updated-text{color:var(--rouge); font-weight:700; font-style: italic;}
+  </style>
 </head>
 <body class="antialiased">
+  <div class="max-w-6xl mx-auto p-4 md:p-8">
 
-    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
+    <header class="text-center mb-10">
+      <h1 class="text-3xl md:text-5xl font-extrabold text-white">Paie_B1_M6_001_Comment_Et_Pourquoi_Se_Former_A_L_Edition_Et_Au_Controle_Des_Declarations_Sociales</h1>
+      <p class="text-slate-400 mt-3 text-lg">Un guide essentiel pour comprendre l'importance et maîtriser les compétences clés liées aux déclarations sociales.</p>
+    </header>
 
-        <header class="text-center mb-12">
-             <!-- Titre exact du document avec dégradé -->
-            <h1 class="text-3xl md:text-4xl font-bold gradient-title">B0_M3_006_Le bon traitement de l'information</h1>
-            <p class="text-lg text-slate-400 mt-4">Votre guide avancé pour transformer le flot d'informations en avantage stratégique.</p>
-        </header>
+    <!-- Introduction -->
+    <section class="card">
+      <div class="hdr" onclick="toggle(this)">
+        <div class="flex items-center gap-3"><span class="text-2xl">🎯</span><h2 class="text-xl font-semibold text-white">I. Contexte & Objectifs</h2></div>
+        <svg class="icon w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div class="cnt">
+        <div class="pt-4">
+          <p class="text-slate-300">La gestion précise et conforme des déclarations sociales est une obligation légale cruciale pour toute entreprise. Déclarer son activité de façon sincère est fondamental, mais la justesse de ces déclarations impacte aussi directement les droits sociaux des salariés (retraite, chômage, santé...), car elles reflètent la réalité des cotisations versées. Savoir établir et contrôler ces déclarations relève donc à la fois du champ réglementaire et du champ de la paie : seules des données salariales justes permettent des déclarations conformes.</p>
+          <p class="mt-2 text-slate-300">Ce processus repose aujourd'hui largement sur des logiciels de paie dédiés. L'établissement des déclarations sociales est donc intimement lié à la qualité des informations saisies et paramétrées dans ces outils numériques.</p>
+           <div class="box border-l-cyan-400">
+            <h3 class="font-bold text-cyan-300">Objectifs Pédagogiques</h3>
+            <p class="mt-2 text-slate-300">Ce guide vise à souligner pourquoi il est indispensable de se former à cette compétence clé et à identifier les savoir-faire essentiels. À l'issue de cette lecture, vous comprendrez :</p>
+            <ul class="list-disc list-inside text-slate-300 space-y-1 mt-2">
+              <li>L'importance stratégique et légale des déclarations sociales.</li>
+              <li>La nécessité d'une veille permanente (réglementaire et technologique) dans un environnement digitalisé.</li>
+              <li>Les compétences fondamentales requises pour éditer et contrôler efficacement les déclarations sociales.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
 
-         <!-- Section Sticky Note -->
-        <div class="sticky-note">
-             <h2>📌 Les 5 Étapes Clés de la Maîtrise</h2>
-             <ul>
-                 <li><strong>Recueillir Pertinemment :</strong> Écoute active, prise de notes ciblée, tri initial.</li>
-                 <li><strong>Vérifier Rigoureusement :</strong> Identifier, croiser et actualiser les sources. Devenir un "détective" de l'info.</li>
-                 <li><strong>Prioriser Stratégiquement :</strong> Distinguer l'urgent de l'important (Matrice Eisenhower).</li>
-                 <li><strong>Transmettre Efficacement :</strong> Choisir le bon canal, le bon moment, le bon destinataire et la bonne forme.</li>
-                 <li><strong>Classer Intelligemment :</strong> Créer une mémoire organisée et accessible (plan de classement, archivage).</li>
+    <!-- 1. Déclarations sociales: une veille permanente -->
+    <section class="card">
+      <div class="hdr" onclick="toggle(this)">
+        <div class="flex items-center gap-3"><span class="text-2xl">1.</span><h2 class="text-xl font-semibold text-cyan-400">II. Déclarations sociales : Une veille permanente</h2></div>
+        <svg class="icon w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div class="cnt">
+        <div class="pt-4">
+            <div class="box border-l-cyan-400">
+                <h3 class="font-bold text-cyan-300">A. Assurer une relation continue et digitalisée avec les organismes</h3>
+                <p class="mt-2 text-slate-300">La gestion des déclarations sociales s'inscrit dans un environnement de plus en plus numérisé. Les échanges avec les organismes collecteurs (URSSAF, caisses de retraite, prévoyance, France Travail...) se font majoritairement via des plateformes dédiées (comme Net-entreprises.fr) et des formats normés, principalement la **DSN (Déclaration Sociale Nominative)**.</p>
+                <p class="mt-2 text-slate-300"><span class="updated-text"><strong><em>Point de vigilance (Septembre 2025) : La DSN est le vecteur quasi-exclusif de transmission des données sociales. Sa maîtrise est cruciale. Elle comprend la DSN mensuelle (issue de la paie) et les signalements d'événements (arrêt de travail, fin de contrat...). Toute erreur (donnée erronée, oubli, retard) peut avoir des conséquences immédiates : pénalités pour l'entreprise, retard ou erreur dans le calcul des droits des salariés (indemnités journalières, allocations chômage, droits retraite...). (Source : Net-entreprises.fr, BOSS.fr).</em></strong></span></p>
+                <p class="mt-2 text-slate-300">Cette digitalisation impose aux équipes en charge (gestionnaires de paie, RH) :</p>
+                 <ul class="list-disc list-inside text-slate-300 space-y-1 mt-2 text-sm">
+                    <li>Une <strong>veille technologique :</strong> Maîtriser les fonctionnalités des logiciels de paie (génération, contrôle DSN) et des portails déclaratifs (Net-entreprises).</li>
+                    <li>Une <strong>veille réglementaire continue :</strong> Suivre les évolutions constantes des taux, assiettes, plafonds, exonérations, nouvelles obligations déclaratives.</li>
+                    <li>Une <strong>rigueur absolue :</strong> Dans le paramétrage des logiciels, la saisie des données individuelles et le contrôle des informations transmises via la DSN.</li>
+                </ul>
+                <p class="hint mt-3">Bonne pratique : Consulter très régulièrement le site <a href="https://www.net-entreprises.fr" target="_blank" class="underline">Net-entreprises.fr</a> (base de connaissance DSN) et le <a href="https://boss.gouv.fr/" target="_blank" class="underline">BOSS.fr</a> (doctrine officielle de l'administration) est indispensable.</p>
+            </div>
+
+            <div class="box border-l-green-400">
+                <h3 class="font-bold text-green-300">B. Maîtriser les compétences fondamentales à votre pratique</h3>
+                <p class="mt-2 text-slate-300">Une formation efficace à l'édition et au contrôle des déclarations sociales doit permettre d'acquérir et de maîtriser un ensemble de compétences techniques et analytiques :</p>
+                 <ul class="list-decimal list-inside text-slate-300 space-y-2 mt-2 text-sm">
+                    <li><strong>Calcul des charges et cotisations obligatoires :</strong> Savoir déterminer les assiettes (brut abattu, plafonné, etc.), appliquer les bons taux (généraux, réduits, spécifiques à certains statuts ou contrats), comprendre les différents plafonds (PMSS, PASS) et les tranches de cotisations (Tranche 1/Tranche 2 pour la retraite complémentaire).</li>
+                    <li><strong>Gestion des déclarations sociales (via la DSN) :</strong> Maîtriser le processus complet : génération de la DSN à partir des données de paie, contrôles de cohérence (internes au logiciel et via les outils de pré-contrôle comme DSN-val), télétransmission dans les délais impartis, gestion des retours (comptes-rendus métiers - CRM). Comprendre la logique des blocs DSN (individus, contrats, rémunérations, cotisations...).</li>
+                    <li><strong>Établissement et gestion des tableaux de bord sociaux :</strong> Savoir extraire, analyser et présenter les données issues de la paie et des déclarations (masse salariale par catégorie, suivi des effectifs, coût des cotisations par risque, suivi des allègements comme la Réduction Générale...). Ces tableaux sont essentiels pour le pilotage RH et financier.</li>
+                    <li><strong>Gestion des relations avec les organismes sociaux :</strong> Être l'interlocuteur technique de l'entreprise. Savoir répondre aux demandes d'informations, préparer et accompagner un contrôle URSSAF, identifier et corriger les anomalies déclaratives (via des blocs de régularisation en DSN), anticiper les potentiels litiges.</li>
+                    <li><strong>Contrôle de versement des charges et cotisations :</strong> Assurer le suivi rigoureux des paiements (télépaiements DSN), effectuer les rapprochements entre les montants déclarés en DSN et les montants prélevés ou payés, gérer les éventuels échéanciers de paiement accordés par les organismes.</li>
+                </ul>
+                 <p class="hint mt-3">Point clé : Même avec l'automatisation croissante via les logiciels, l'expertise humaine est irremplaçable pour interpréter les textes, vérifier la plausibilité des résultats, gérer les situations complexes ou non prévues par le logiciel, et assurer la conformité globale.</p>
+            </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 2. L'essentiel -->
+    <section class="card">
+      <div class="hdr" onclick="toggle(this)">
+        <div class="flex items-center gap-3"><span class="text-2xl">2.</span><h2 class="text-xl font-semibold text-orange-400">III. L'essentiel : Pourquoi est-ce une compétence stratégique ?</h2></div>
+        <svg class="icon w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div class="cnt">
+        <div class="pt-4">
+             <p class="text-slate-300">Maîtriser l'édition et le contrôle des déclarations sociales confère un rôle central et stratégique. Que vous soyez gestionnaire de paie, professionnel RH ou indépendant, cette compétence est une nécessité pour toute entreprise. Elle permet de répondre aux questions fondamentales :</p>
+             <ul class="list-decimal list-inside text-slate-300 space-y-1 mt-2 mb-4 text-sm">
+                <li>Les données collectées et utilisées pour les déclarations sont-elles exactes et conformes ?</li>
+                <li>Comment établir, suivre et transmettre correctement les informations à chaque organisme social ?</li>
+                <li>Quelles sont les évolutions sociales et réglementaires (taux, nouvelles règles, etc.) qui peuvent impacter les déclarations et les coûts de l'entreprise ?</li>
              </ul>
+            <div class="box border-l-orange-400">
+                <h3 class="font-bold text-orange-300">Garantir la conformité légale et éviter les sanctions</h3>
+                <p class="mt-2 text-slate-300 text-sm">Des déclarations erronées, incomplètes ou transmises hors délai exposent l'entreprise à des <span class="updated-text"><strong><em>pénalités financières (majorations de retard, taxation d'office) potentiellement très lourdes, notamment en cas de contrôle URSSAF.</em></strong></span></p>
+            </div>
+             <div class="box border-l-green-400">
+                <h3 class="font-bold text-green-300">Sécuriser les droits sociaux des salariés</h3>
+                <p class="mt-2 text-slate-300 text-sm">La DSN alimente directement les comptes individuels des salariés auprès des différents organismes (Assurance Maladie, France Travail, CNAV, AGIRC-ARRCO...). Des déclarations justes sont donc indispensables pour le calcul correct et rapide de leurs prestations (indemnités journalières, allocations chômage, droits à la retraite...). Une erreur peut bloquer ou fausser leurs droits.</p>
+            </div>
+            <div class="box border-l-cyan-400">
+                <h3 class="font-bold text-cyan-300">Optimiser les charges sociales</h3>
+                <p class="mt-2 text-slate-300 text-sm">Une parfaite maîtrise des règles (calcul des assiettes, conditions d'éligibilité) permet d'appliquer correctement et de sécuriser les dispositifs d'exonérations et de réductions de cotisations (Réduction Générale sur les bas salaires, exonérations spécifiques...).</p>
+            </div>
+             <div class="box border-l-rose-400">
+                <h3 class="font-bold text-rose-300">Devenir la personne-ressource</h3>
+                <p class="mt-2 text-slate-300 text-sm">Le professionnel maîtrisant les déclarations sociales est l'interlocuteur technique clé pour les organismes sociaux, mais aussi en interne pour répondre aux questions des salariés ou de la direction sur ces sujets complexes.</p>
+            </div>
+             <p class="mt-4 text-slate-300">Cette activité exige donc une grande rigueur, une organisation sans faille (respect des échéances !), une bonne qualité de communication (avec les organismes, en interne) et une capacité à intégrer et comprendre les évolutions sociales et juridiques permanentes.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quiz -->
+    <section class="card">
+      <div class="hdr" onclick="toggle(this)">
+        <div class="flex items-center gap-3"><span class="text-2xl">🎓</span><h2 class="text-xl font-semibold text-purple-300">Quiz Final d'Évaluation</h2></div>
+        <svg class="icon w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div class="cnt">
+        <div class="q">
+          <p class="font-semibold">QCM 1/10</p>
+          <p class="mt-2">Quel est le nom du système unique de déclaration sociale en France ?</p>
+          <label class="block mt-2"><input type="radio" name="qz1" value="a"> La DUCS (Déclaration Unifiée de Cotisations Sociales)</label>
+          <label class="block mt-1"><input type="radio" name="qz1" value="b"> La DSN (Déclaration Sociale Nominative)</label>
+          <label class="block mt-1"><input type="radio" name="qz1" value="c"> La DADS-U (Déclaration Automatisée des Données Sociales Unifiée)</label>
+          <div id="qz1-fb" class="ok"></div>
+        </div>
+         <div class="q">
+          <p class="font-semibold">QCM 2/10</p>
+          <p class="mt-2">Pourquoi une veille réglementaire est-elle cruciale dans la gestion des déclarations sociales ?</p>
+          <label class="block mt-2"><input type="radio" name="qz2" value="a"> Pour connaître les dates de vacances des agents URSSAF.</label>
+          <label class="block mt-1"><input type="radio" name="qz2" value="b"> Car les taux, assiettes et règles de calcul des cotisations changent fréquemment.</label>
+          <label class="block mt-1"><input type="radio" name="qz2" value="c"> Pour choisir le meilleur logiciel de paie.</label>
+          <div id="qz2-fb" class="ok"></div>
+        </div>
+         <div class="q">
+          <p class="font-semibold">QCM 3/10</p>
+          <p class="mt-2">Laquelle de ces tâches N'EST PAS une compétence fondamentale pour gérer les déclarations sociales ?</p>
+          <label class="block mt-2"><input type="radio" name="qz3" value="a"> Calculer les cotisations.</label>
+          <label class="block mt-1"><input type="radio" name="qz3" value="b"> Contrôler les versements.</label>
+          <label class="block mt-1"><input type="radio" name="qz3" value="c"> Mener les entretiens annuels d'évaluation.</label>
+          <div id="qz3-fb" class="ok"></div>
+        </div>
+        <div class="q">
+          <p class="font-semibold">QCM 4/10</p>
+          <p class="mt-2">Quel site officiel centralise la doctrine de l'administration sur les règles de cotisations et contributions sociales ?</p>
+          <label class="block mt-2"><input type="radio" name="qz4" value="a"> Legifrance.gouv.fr</label>
+          <label class="block mt-1"><input type="radio" name="qz4" value="b"> Service-public.fr</label>
+          <label class="block mt-1"><input type="radio" name="qz4" value="c"> BOSS.gouv.fr</label>
+          <div id="qz4-fb" class="ok"></div>
+        </div>
+        <div class="q">
+          <p class="font-semibold">Vrai ou Faux 5/10</p>
+           <p class="mt-2">La DSN mensuelle remplace toutes les autres déclarations sociales périodiques (URSSAF, Retraite...).</p>
+           <label class="block mt-2"><input type="radio" name="qz5" value="a"> Vrai</label>
+           <label class="block mt-1"><input type="radio" name="qz5" value="b"> Faux</label>
+           <div id="qz5-fb" class="ok"></div>
+        </div>
+         <div class="q">
+          <p class="font-semibold">Vrai ou Faux 6/10</p>
+           <p class="mt-2">Une erreur dans les déclarations sociales n'impacte que l'entreprise et jamais les salariés.</p>
+           <label class="block mt-2"><input type="radio" name="qz6" value="a"> Vrai</label>
+           <label class="block mt-1"><input type="radio" name="qz6" value="b"> Faux</label>
+           <div id="qz6-fb" class="ok"></div>
+        </div>
+         <div class="q">
+          <p class="font-semibold">Vrai ou Faux 7/10</p>
+           <p class="mt-2">Le contrôle humain des déclarations générées par le logiciel de paie est devenu superflu avec l'automatisation.</p>
+           <label class="block mt-2"><input type="radio" name="qz7" value="a"> Vrai</label>
+           <label class="block mt-1"><input type="radio" name="qz7" value="b"> Faux</label>
+           <div id="qz7-fb" class="ok"></div>
+        </div>
+         <div class="q">
+          <p class="font-semibold">Vrai ou Faux 8/10</p>
+           <p class="mt-2">Les signalements d'événements en DSN (arrêt maladie, fin de contrat) doivent être envoyés en même temps que la DSN mensuelle.</p>
+           <label class="block mt-2"><input type="radio" name="qz8" value="a"> Vrai</label>
+           <label class="block mt-1"><input type="radio" name="qz8" value="b"> Faux</label>
+           <div id="qz8-fb" class="ok"></div>
         </div>
 
-        <div class="space-y-6">
-
-            <!-- Section 1: Recueillir & Vérifier -->
-            <div class="infographic-card">
-                <div class="infographic-header" onclick="toggleSection(this)">
-                    <div class="flex items-center space-x-4">
-                        <div class="text-3xl">📥</div>
-                        <h2 class="text-xl font-semibold text-blue-400">Étape 1 : Collecte Ciblée et Vérification Approfondie</h2>
-                    </div>
-                    <svg class="icon w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="infographic-content">
-                     <!-- Onglets pour la navigation interne -->
-                    <div class="mt-4 flex flex-wrap gap-2">
-                        <button class="interactive-tab active" style="background-color: var(--bleu-clair); border-color: var(--bleu-clair);" onclick="showPanel(event, 'collecte-strategie')">Stratégies de Collecte</button>
-                        <button class="interactive-tab" onclick="showPanel(event, 'collecte-verif')">Techniques de Vérification</button>
-                        <button class="interactive-tab" onclick="showPanel(event, 'collecte-atelier')">Atelier Pratique</button>
-                    </div>
-
-                    <div id="collecte-strategie" class="tab-panel active">
-                        <div class="rule-box border-blue">
-                            <h3 class="rule-title text-blue-300">De l'Écoute Active à la Synthèse Immédiate</h3>
-                            <p class="text-slate-300">Ne soyez plus une éponge, devenez un filtre intelligent dès la réception de l'information.</p>
-                            <ul class="list-disc list-inside text-slate-300 space-y-3 mt-3">
-                                <li><strong>Écoute Active + :</strong> Concentrez-vous (éliminez les distractions), posez des questions ouvertes pour creuser ("Pouvez-vous préciser ce point ?"), reformulez pour confirmer ("Donc, si je résume..."). Identifiez non seulement les faits, mais aussi les <span class="font-semibold">intentions</span> et les <span class="font-semibold">besoins</span> cachés.</li>
-                                <li><strong>Prise de Notes Stratégique :</strong> Utilisez une trame pré-définie (voir guide Compte-Rendu). Notez les <span class="font-semibold">décisions</span>, les <span class="font-semibold">actions</span> (avec Qui/Quoi/Quand), les <span class="font-semibold">chiffres clés</span>, les <span class="font-semibold">sources</span> mentionnées. Utilisez mots-clés, abréviations et symboles.</li>
-                                <li><strong>Tri Instantané (Filtre Mental) :</strong> Pour chaque information reçue, demandez-vous : <strong>1. Essentiel ?</strong> (Impact direct sur mon travail/objectifs) <strong>2. Urgent ?</strong> (Date limite proche ?) <strong>3. Actionnable par moi ?</strong> (Ou à déléguer/transmettre ?). Ce tri rapide évite l'accumulation.</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div id="collecte-verif" class="tab-panel">
-                         <p class="text-slate-300">Dans un monde de "fake news" et d'informations volatiles, la vérification est votre bouclier.</p>
-                        <div class="rule-box border-blue">
-                            <h3 class="rule-title text-blue-300">Le Triptyque de la Fiabilité : Source - Fraîcheur - Corroboration</h3>
-                            <ul class="list-disc list-inside text-slate-300 space-y-3 mt-3">
-                                <li><strong>Qualification des Sources :</strong> Hiérarchisez vos sources. <span class="font-semibold">Niveau 1 (Fiabilité max) :</span> Documents officiels (lois, décrets, circulaires URSSAF, BOSS), experts reconnus, documentation interne validée. <span class="font-semibold">Niveau 2 (Bonne fiabilité) :</span> Articles de presse spécialisée réputée, collègues experts. <span class="font-semibold">Niveau 3 (À vérifier systématiquement) :</span> Echanges oraux informels, forums, articles généralistes.</li>
-                                <li><strong>Validation de la Fraîcheur :</strong> Vérifiez systématiquement la <span class="font-semibold">date de publication</span> ou de mise à jour. Une information juridique ou sociale vieille de 6 mois peut être caduque. Mettez en place une veille active (newsletters spécialisées, alertes Google...).</li>
-                                <li><strong>Principe de Corroboration :</strong> Une information critique ou surprenante DOIT être confirmée par <span class="font-semibold">au moins une autre source fiable</span> de Niveau 1 ou 2. Ne vous fiez jamais à une seule source, surtout si elle est de Niveau 3.</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div id="collecte-atelier" class="tab-panel">
-                        <h3 class="text-lg font-semibold text-slate-200">Atelier : Analyse Critique d'une Information</h3>
-                        <p class="text-slate-400 text-sm">Vous lisez sur un forum non officiel qu'une nouvelle exonération de charges s'applique aux PME dès le mois prochain. Décrivez votre processus de vérification étape par étape.</p>
-                        <textarea id="atelier-collecte" class="atelier-input mt-4" placeholder="Vos étapes de vérification ici..."></textarea>
-                        <button class="action-button mt-4 bg-blue-500 hover:bg-blue-400" onclick="checkCollecteAtelier()">Voir un exemple de démarche</button>
-                        <div id="collecte-feedback" class="quiz-feedback mt-2"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section 2: Prioriser -->
-            <div class="infographic-card">
-                <div class="infographic-header" onclick="toggleSection(this)">
-                    <div class="flex items-center space-x-4">
-                        <div class="text-3xl">🚦</div>
-                        <h2 class="text-xl font-semibold text-orange-400">Étape 2 : Priorisation Stratégique (Matrice Eisenhower+)</h2>
-                    </div>
-                    <svg class="icon w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="infographic-content">
-                     <div class="mt-4 flex flex-wrap gap-2">
-                        <button class="interactive-tab active" style="background-color: var(--orange); border-color: var(--orange);" onclick="showPanel(event, 'prio-matrice')">La Matrice Eisenhower Détaillée</button>
-                        <button class="interactive-tab" onclick="showPanel(event, 'prio-atelier')">Atelier de Priorisation Avancé</button>
-                    </div>
-                    
-                    <div id="prio-matrice" class="tab-panel active">
-                        <p class="text-slate-300">Allez plus loin que la simple classification. Intégrez l'impact et l'effort.</p>
-                         <div class="rule-box border-orange mt-4">
-                            <h3 class="rule-title text-orange-300">Au-delà d'Urgent/Important : L'Impact et l'Effort</h3>
-                            <p class="text-slate-300">Pour affiner votre priorisation, ajoutez deux dimensions :</p>
-                            <ul class="list-disc list-inside text-slate-300 space-y-2 mt-2">
-                                <li><strong>Impact :</strong> Quel est le bénéfice (ou le coût évité) si cette tâche est réalisée ? (Faible / Moyen / Fort)</li>
-                                <li><strong>Effort :</strong> Combien de temps/ressources cette tâche demande-t-elle ? (Faible / Moyen / Fort)</li>
-                            </ul>
-                            <p class="text-slate-300 mt-2"><strong>Stratégie :</strong> Concentrez-vous sur les tâches à <span class="font-semibold">Fort Impact</span> et <span class="font-semibold">Faible Effort</span> ("Quick Wins"). Planifiez celles à Fort Impact / Fort Effort. Déléguez ou simplifiez celles à Faible Impact.</p>
-                        </div>
-                        <h4 class="font-semibold text-xl mt-6 mb-2 text-slate-300">Matrice d'Eisenhower :</h4>
-                        <div class="eisenhower-matrix">
-                            <div class="eisenhower-quadrant bg-red-900/50 border-l-4 border-red-500">
-                                <h4 class="font-bold text-red-400">🔥 Urgent et Important</h4>
-                                <p class="text-sm text-slate-300"><strong>Action : FAIRE IMMÉDIATEMENT.</strong><br/>Ex: Gérer une DSN bloquante, corriger une erreur de paie signalée par un salarié avant virement.</p>
-                            </div>
-                            <div class="eisenhower-quadrant bg-yellow-900/50 border-l-4 border-yellow-500">
-                                <h4 class="font-bold text-yellow-400">🗓️ Important mais non Urgent</h4>
-                                <p class="text-sm text-slate-300"><strong>Action : PLANIFIER.</strong><br/>Ex: Préparer la clôture de paie du mois prochain, mettre à jour une procédure interne, suivre une formation.</p>
-                            </div>
-                             <div class="eisenhower-quadrant bg-blue-900/50 border-l-4 border-blue-500">
-                                <h4 class="font-bold text-blue-400">💨 Urgent mais non Important</h4>
-                                <p class="text-sm text-slate-300"><strong>Action : DÉLÉGUER ou MINIMISER.</strong><br/>Ex: Répondre à une demande d'info déjà documentée, assister à une réunion non essentielle.</p>
-                            </div>
-                            <div class="eisenhower-quadrant bg-gray-800/50 border-l-4 border-gray-600">
-                                <h4 class="font-bold text-gray-500">🗑️ Ni Urgent, ni Important</h4>
-                                <p class="text-sm text-slate-300"><strong>Action : ÉLIMINER ou REPORTER INDÉFINIMENT.</strong><br/>Ex: Lire des e-mails promotionnels non sollicités, perfectionner un détail mineur.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="prio-atelier" class="tab-panel">
-                        <h3 class="text-lg font-semibold text-slate-200">Atelier : Cas Pratique de Priorisation</h3>
-                        <p class="text-slate-400 text-sm">Vous recevez ces 3 informations un lundi matin. Classez-les selon Eisenhower et justifiez.</p>
-                        <div class="quiz-question">
-                            <p>1. E-mail de l'URSSAF : Contrôle imminent annoncé pour dans 3 semaines.</p>
-                            <div class="quiz-options">
-                                <label><input type="radio" name="q1-prio" value="a"> Urgent/Important (Faire)</label>
-                                <label><input type="radio" name="q1-prio" value="b"> Important/Non Urgent (Planifier)</label>
-                            </div><div class="quiz-feedback"></div>
-                        </div>
-                         <div class="quiz-question">
-                            <p>2. Collègue : "Peux-tu me montrer comment utiliser la fonction X du logiciel de paie quand tu as 5 min ?"</p>
-                            <div class="quiz-options">
-                                <label><input type="radio" name="q2-prio" value="a"> Important/Non Urgent (Planifier)</label>
-                                <label><input type="radio" name="q2-prio" value="b"> Urgent/Non Important (Déléguer/Minimiser)</label>
-                            </div><div class="quiz-feedback"></div>
-                        </div>
-                        <div class="quiz-question">
-                            <p>3. Notification : Mise à jour mineure de l'interface d'un outil secondaire.</p>
-                            <div class="quiz-options">
-                                <label><input type="radio" name="q3-prio" value="a"> Ni Urgent/Ni Important (Éliminer/Reporter)</label>
-                                <label><input type="radio" name="q3-prio" value="b"> Important/Non Urgent (Planifier)</label>
-                            </div><div class="quiz-feedback"></div>
-                        </div>
-                        <button class="action-button bg-orange-500 hover:bg-orange-400" onclick="checkQuiz(this, [{'name': 'q1-prio', 'answer': 'b'}, {'name': 'q2-prio', 'answer': 'b'}, {'name': 'q3-prio', 'answer': 'a'}])">Vérifier</button>
-                    </div>
-                </div>
-            </div>
-            
-             <!-- Section 3: Transmettre & Classer -->
-            <div class="infographic-card">
-                 <div class="infographic-header" onclick="toggleSection(this)">
-                    <div class="flex items-center space-x-4">
-                        <div class="text-3xl">📂</div>
-                        <h2 class="text-xl font-semibold text-vert-400">Étape 3 : Transmission Maîtrisée et Classement Pérenne</h2>
-                    </div>
-                    <svg class="icon w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                 <div class="infographic-content">
-                     <div class="mt-4 flex flex-wrap gap-2">
-                        <button class="interactive-tab active" style="background-color: var(--vert); border-color: var(--vert);" onclick="showPanel(event, 'trans-def')">Stratégies de Diffusion</button>
-                        <button class="interactive-tab" onclick="showPanel(event, 'trans-class')">Principes de Classement</button>
-                        <button class="interactive-tab" onclick="showPanel(event, 'trans-atelier')">Atelier : Choix du Canal</button>
-                    </div>
-                    <div id="trans-def" class="tab-panel active">
-                         <div class="rule-box border-vert">
-                            <h3 class="rule-title text-vert-300">Diffuser avec Impact : Les 4 Bons</h3>
-                            <ul class="list-disc list-inside text-slate-300 space-y-3 mt-3">
-                               <li><strong>Bon Destinataire :</strong> Ciblez précisément. Une info sur les cadres ne concerne pas les ouvriers. Utilisez des listes de diffusion.</li>
-                               <li><strong>Bon Moment :</strong> Anticipez les échéances. Communiquez les changements bien avant leur application. Évitez les "bombes" de dernière minute.</li>
-                               <li><strong>Bonne Forme (Canal) :</strong>
-                                    <ul class="list-['-_'] list-inside ml-4">
-                                        <li><span class="font-semibold">Urgent & Simple :</span> Chat, Téléphone (avec trace écrite si nécessaire).</li>
-                                        <li><span class="font-semibold">Important & Détaillé :</span> E-mail structuré, Note interne.</li>
-                                        <li><span class="font-semibold">Complexe & Stratégique :</span> Réunion (avec support écrit et CR).</li>
-                                        <li><span class="font-semibold">Information Générale :</span> Intranet, Affichage.</li>
-                                    </ul>
-                                </li>
-                               <li><strong>Bon Contenu :</strong> Soyez clair, concis, précis. Utilisez le <span class="font-semibold">langage adapté</span> à votre cible (technique vs vulgarisé). Mettez en avant l'action attendue si besoin.</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div id="trans-class" class="tab-panel">
-                        <div class="rule-box border-vert">
-                            <h3 class="rule-title text-vert-300">Construire la Mémoire de l'Entreprise</h3>
-                            <p class="text-slate-300">Un bon classement n'est pas une contrainte, c'est un gain de temps et une sécurité.</p>
-                             <ul class="list-disc list-inside text-slate-300 space-y-3 mt-3">
-                                <li><strong>Plan de Classement Logique :</strong> Définissez une arborescence claire et partagée (par thème, par année, par salarié...). Ex: <span class="font-mono text-sm">/Paie/2024/DSN/Mars</span>.</li>
-                                <li><strong>Nommage Cohérent des Fichiers :</strong> Utilisez une convention de nommage systématique. Ex: <span class="font-mono text-sm">YYYY-MM-DD_TypeDocument_Sujet_Version.ext</span> (2024-10-25_NoteService_HorairesHiver_V1.pdf).</li>
-                                <li><strong>Archivage vs. Classement Courant :</strong> Séparez les dossiers actifs des archives. Définissez des règles claires de durée de conservation (légales et internes).</li>
-                                <li><strong>Sécurité et Accès :</strong> Gérez les droits d'accès pour assurer la confidentialité (RGPD). Utilisez des outils sécurisés (serveurs internes, GED, SIRH).</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div id="trans-atelier" class="tab-panel">
-                        <h3 class="text-lg font-semibold text-slate-200">Atelier : Quel canal pour quelle information ?</h3>
-                        <p class="text-slate-400 text-sm">Pour chaque situation, choisissez le canal de transmission le plus adapté et justifiez brièvement.</p>
-                         <div class="quiz-question">
-                            <p>1. Informer l'ensemble des salariés d'un changement d'horaires d'été.</p>
-                            <div class="quiz-options">
-                                <label><input type="radio" name="q1-trans" value="a"> E-mail à tous + Affichage + Note interne (peut-être Intranet)</label>
-                                <label><input type="radio" name="q1-trans" value="b"> Un simple appel téléphonique aux chefs de service.</label>
-                            </div><div class="quiz-feedback"></div>
-                        </div>
-                         <div class="quiz-question">
-                            <p>2. Demander une pièce manquante à un salarié pour son dossier.</p>
-                            <div class="quiz-options">
-                                <label><input type="radio" name="q2-trans" value="a"> Une note de service.</label>
-                                <label><input type="radio" name="q2-trans" value="b"> Un e-mail personnalisé ou un appel rapide.</label>
-                            </div><div class="quiz-feedback"></div>
-                        </div>
-                        <button class="action-button bg-green-600 hover:bg-green-500" onclick="checkQuiz(this, [{'name': 'q1-trans', 'answer': 'a'}, {'name': 'q2-trans', 'answer': 'b'}])">Vérifier</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section 4: Quiz Final -->
-            <!-- Correction: Ajout d'un ID unique pour cette carte -->
-            <div class="infographic-card" id="final-quiz-card">
-                 <div class="infographic-header" onclick="toggleSection(this)">
-                    <div class="flex items-center space-x-4">
-                        <div class="text-3xl">🏆</div>
-                        <h2 class="text-xl font-semibold text-yellow-400">Quiz Final de Maîtrise du Traitement de l'Information</h2>
-                    </div>
-                    <svg class="icon w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                 <div class="infographic-content open" style="max-height: fit-content;">
-                    <p class="text-slate-300 pt-4">Vous avez exploré toutes les étapes. Testez votre expertise globale !</p>
-                    <div class="tab-panel active">
-                        <div class="quiz-question">
-                            <p>1. Laquelle de ces actions fait partie de l'écoute active ?</p>
-                            <div class="quiz-options">
-                                <label><input type="radio" name="q1-final" value="a"> Préparer sa réponse pendant que l'autre parle.</label>
-                                <label><input type="radio" name="q1-final" value="b"> Reformuler ce que l'interlocuteur a dit pour confirmer la compréhension.</label>
-                            </div><div class="quiz-feedback"></div>
-                        </div>
-                        <div class="quiz-question">
-                            <p>2. Une information trouvée sur un site gouvernemental (ex: URSSAF) est considérée comme une source de :</p>
-                            <div class="quiz-options">
-                                <label><input type="radio" name="q2-final" value="a"> Niveau 1 (Fiabilité Maximale).</label>
-                                <label><input type="radio" name="q2-final" value="b"> Niveau 3 (À vérifier systématiquement).</label>
-                            </div><div class="quiz-feedback"></div>
-                        </div>
-                        <div class="quiz-question">
-                            <p>3. Classer une tâche comme "Urgente mais non importante" signifie qu'il faut idéalement :</p>
-                            <div class="quiz-options">
-                                <label><input type="radio" name="q3-final" value="a"> La faire avant tout le reste.</label>
-                                <label><input type="radio" name="q3-final" value="b"> La déléguer, l'automatiser ou minimiser le temps passé dessus.</label>
-                            </div><div class="quiz-feedback"></div>
-                        </div>
-                         <div class="quiz-question">
-                            <p>4. Pour annoncer une décision stratégique complexe impactant plusieurs services, le meilleur canal est :</p>
-                            <div class="quiz-options">
-                                <label><input type="radio" name="q4-final" value="a"> Un e-mail envoyé à tous les salariés.</label>
-                                <label><input type="radio" name="q4-final" value="b"> Une réunion avec les responsables concernés, suivie d'un compte-rendu écrit et éventuellement d'une note d'information.</label>
-                            </div><div class="quiz-feedback"></div>
-                        </div>
-                        <div class="quiz-question">
-                            <p>5. L'avantage principal d'une convention de nommage de fichiers cohérente est de :</p>
-                            <div class="quiz-options">
-                                <label><input type="radio" name="q5-final" value="a"> Rendre les noms de fichiers plus jolis.</label>
-                                <label><input type="radio" name="q5-final" value="b"> Faciliter la recherche et l'identification rapide des documents par toute l'équipe.</label>
-                            </div><div class="quiz-feedback"></div>
-                        </div>
-                        <button class="action-button bg-yellow-600 hover:bg-yellow-500 mt-4" onclick="checkQuiz(this, [{'name': 'q1-final', 'answer': 'b'}, {'name': 'q2-final', 'answer': 'a'}, {'name': 'q3-final', 'answer': 'b'}, {'name': 'q4-final', 'answer': 'b'}, {'name': 'q5-final', 'answer': 'b'}])">Valider mon Expertise</button>
-                    </div>
-                </div>
-            </div>
-            
+        <div class="q">
+          <p class="font-semibold">Mini Cas Pratique 9/10</p>
+          <p class="mt-2">Vous recevez une notification de Net-entreprises indiquant un compte-rendu métier (CRM) avec une anomalie bloquante sur votre dernière DSN transmise. Quelle est votre priorité et que risquez-vous si vous ne réagissez pas ?</p>
+          <textarea id="qz9-answer" class="w-full bg-slate-800 border border-slate-600 rounded-md p-2 mt-2" rows="3" placeholder="Action prioritaire et risque..."></textarea>
+          <div id="qz9-fb" class="ok"></div>
         </div>
 
-        <footer class="text-center mt-16">
-            <p class="text-slate-400">Mathilde Martine PAISLEY - 🔥Énervyx🔥</p>
-        </footer>
-    </div>
+         <div class="q">
+          <p class="font-semibold">Mini Cas Pratique 10/10</p>
+          <p class="mt-2">Votre direction vous demande d'établir un tableau de bord pour suivre le coût de la Réduction Générale des cotisations patronales. Quelles données issues de la paie ou des déclarations allez-vous utiliser principalement ?</p>
+          <textarea id="qz10-answer" class="w-full bg-slate-800 border border-slate-600 rounded-md p-2 mt-2" rows="3" placeholder="Principales données nécessaires..."></textarea>
+          <div id="qz10-fb" class="ok"></div>
+        </div>
 
-    <script>
-        function toggleSection(headerElement) {
-            const content = headerElement.nextElementSibling;
-            const icon = headerElement.querySelector('.icon');
-            const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+        <button class="btn bg-blue-500" onclick="checkFinalQuiz()">Valider mes 10 réponses</button>
+      </div>
+    </section>
 
-            // Fermer les autres sections SAUF le quiz final
-             document.querySelectorAll('.infographic-content.open').forEach(openContent => {
-                 // Correction: Vérifier l'ID de la carte parente
-                if (openContent !== content && openContent.closest('.infographic-card').id !== 'final-quiz-card') {
-                    openContent.style.maxHeight = null;
-                    openContent.classList.remove('open');
-                    const otherIcon = openContent.previousElementSibling.querySelector('.icon');
-                    if (otherIcon) otherIcon.classList.remove('open');
-                }
-            });
+    <!-- Glossaire -->
+    <section class="card">
+      <div class="hdr" onclick="toggle(this)">
+        <div class="flex items-center gap-3"><span class="text-2xl">📚</span><h2 class="text-xl font-semibold text-white">Glossaire des Acronymes</h2></div>
+        <svg class="icon w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+      <div class="cnt">
+        <div class="pt-4">
+          <p class="text-slate-300">Pour faciliter votre lecture, voici la signification des principaux acronymes utilisés dans ce guide.</p>
+          <div class="box border-l-gray-400">
+             <ul class="list-disc list-inside text-slate-300 space-y-2 mt-2 text-sm">
+                <li><strong>AGIRC-ARRCO :</strong> Régimes de retraite complémentaire des salariés du privé.</li>
+                <li><strong>BOSS :</strong> Bulletin Officiel de la Sécurité Sociale.</li>
+                <li><strong>CNAV :</strong> Caisse Nationale d'Assurance Vieillesse (Retraite de base).</li>
+                <li><strong>CRM :</strong> Compte Rendu Métier (retour d'information sur une DSN transmise).</li>
+                <li><strong>DSN :</strong> Déclaration Sociale Nominative.</li>
+                <li><strong>PMSS / PASS :</strong> Plafond Mensuel / Annuel de la Sécurité Sociale.</li>
+                <li><strong>RH :</strong> Ressources Humaines.</li>
+                <li><strong>URSSAF :</strong> Union de Recouvrement des cotisations de Sécurité Sociale et d'Allocations Familiales.</li>
+             </ul>
+          </div>
+        </div>
+      </div>
+    </section>
 
-            // Ouvrir ou fermer la section courante
-            if (!isOpen) {
-                // Ensure the first tab is active when opening
-                const firstTab = content.querySelector('.interactive-tab');
-                 if (firstTab && !firstTab.classList.contains('active')) {
-                     showPanel({ currentTarget: firstTab }, firstTab.getAttribute('onclick').match(/showPanel\(event, '(.*?)'\)/)[1]);
-                 } else if (firstTab) {
-                    // If already active, ensure panel is displayed
-                     const activePanelId = firstTab.getAttribute('onclick').match(/showPanel\(event, '(.*?)'\)/)[1];
-                     const activePanel = document.getElementById(activePanelId);
-                     if (activePanel) activePanel.classList.add('active'); // Ensure it's active
-                 }
-                 // Set max-height after potentially showing the panel
-                 // Use setTimeout to allow DOM update for scrollHeight calculation
-                 setTimeout(() => {
-                    content.style.maxHeight = content.scrollHeight + "px";
-                    content.classList.add('open');
-                    icon.classList.add('open');
-                 }, 0);
-            } else {
-                content.style.maxHeight = null;
-                content.classList.remove('open');
-                icon.classList.remove('open');
-            }
-        }
+  </div>
 
+<script>
+  function toggle(h){
+    const c=h.nextElementSibling; const i=h.querySelector('.icon');
+    const isOpen = c.classList.contains('open');
+    if(!isOpen){ 
+        c.classList.add('open');
+        c.style.maxHeight = c.scrollHeight + 'px';
+        i.classList.add('open'); 
+    } else { 
+        c.style.maxHeight = null; 
+        c.classList.remove('open'); 
+        i.classList.remove('open'); 
+    }
+  }
 
-       function showPanel(event, panelId) {
-            const button = event.currentTarget;
-            const cardContent = button.closest('.infographic-content');
-            // Hide all panels in the current card
-            cardContent.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-             // Deactivate all tabs in the current card
-            cardContent.querySelectorAll('.interactive-tab').forEach(b => {
-                b.classList.remove('active');
-                b.style.backgroundColor = 'var(--bleu-moyen)';
-                b.style.borderColor = 'var(--bleu-moyen)';
-            });
-            // Activate the target panel and tab
-            const targetPanel = document.getElementById(panelId);
-            if (targetPanel) {
-                targetPanel.classList.add('active');
-            }
-            button.classList.add('active');
-            
-            // Set active color based on panel prefix
-             const panelPrefix = panelId.split('-')[0];
-             let activeColor;
-             switch (panelPrefix) {
-                case 'collecte': activeColor = 'var(--bleu-clair)'; break;
-                case 'prio': activeColor = 'var(--orange)'; break;
-                case 'trans': activeColor = 'var(--vert)'; break;
-                default: activeColor = 'var(--bleu-moyen)';
-            }
-            button.style.backgroundColor = activeColor;
-            button.style.borderColor = activeColor;
+  document.addEventListener('DOMContentLoaded', () => {
+    const headers = document.querySelectorAll('.card .hdr');
+    if (headers.length > 0) {
+        toggle(headers[0]); // Ouvre la première section par défaut
+    }
+  });
 
-            // Recalculate scrollHeight for the parent content if it's open
-            if(cardContent.classList.contains('open')) {
-                 setTimeout(() => {
-                    if (targetPanel) {
-                       // Get height of tab controls section + target panel + some padding
-                       const tabControlsHeight = cardContent.querySelector('.flex-wrap.gap-2')?.offsetHeight || 50;
-                       const panelHeight = targetPanel.scrollHeight;
-                       const extraPadding = 30; // Extra space
-                       cardContent.style.maxHeight = (tabControlsHeight + panelHeight + extraPadding) + "px";
-                    } else {
-                        cardContent.style.maxHeight = '500px'; // Fallback
-                    }
-                 }, 50); // Delay allows panel to render
-            }
-        }
-        
-        function checkCollecteAtelier() {
-            const feedback = document.getElementById('collecte-feedback');
-            feedback.innerHTML = `<strong>Exemple de Démarche :</strong><br>
-            1. <strong>Qualifier la Source :</strong> Forum non officiel = Niveau 3 (faible fiabilité). Information à prendre avec d'extrêmes précautions.<br>
-            2. <strong>Rechercher sur Sources Officielles (Niveau 1) :</strong> Consulter immédiatement Legifrance, le site de l'URSSAF et le BOSS pour trouver une trace de cette nouvelle exonération (texte de loi, décret, circulaire).<br>
-            3. <strong>Consulter Sources Spécialisées (Niveau 2) :</strong> Vérifier sur des sites d'actualité juridique/paie reconnus ou dans des revues spécialisées.<br>
-            4. <strong>Corroborer :</strong> Si l'information est confirmée par une source officielle (Niveau 1), elle est valide. Si elle n'est trouvée nulle part ailleurs, la considérer comme fausse ou non applicable pour l'instant.<br>
-            5. <strong>Action :</strong> Ne PAS appliquer l'exonération tant qu'elle n'est pas confirmée par une source officielle. Informer éventuellement sa hiérarchie de la rumeur et du résultat des vérifications.`;
-            feedback.className = 'quiz-feedback feedback-correct'; // Utilise le style correct pour l'affichage
-        }
+  function feedback(id, msg, isCorrect) {
+      const el = document.getElementById(id);
+      el.innerHTML = msg;
+      el.className = 'ok ' + (isCorrect ? 'good' : 'bad');
+  }
 
-        function checkQuiz(button, questions) {
-            let allCorrect = true;
-            questions.forEach(q => {
-                const radios = document.getElementsByName(q.name);
-                const feedbackDiv = radios[0].closest('.quiz-question').querySelector('.quiz-feedback');
-                let selectedValue = null;
-                for (const radio of radios) {
-                    if (radio.checked) { selectedValue = radio.value; break; }
-                }
-                
-                feedbackDiv.style.display = 'block'; // Rendre visible
+  const quizAnswers = { 
+      qz1: 'b', qz2: 'b', qz3: 'c', qz4: 'c',
+      qz5: 'a', qz6: 'b', qz7: 'b', qz8: 'b'
+  };
 
-                if (!selectedValue) {
-                     feedbackDiv.textContent = 'Veuillez sélectionner une réponse.';
-                     feedbackDiv.className = 'quiz-feedback feedback-incorrect';
-                     allCorrect = false;
-                     return;
-                }
+  function checkFinalQuiz() {
+      // QCM and Vrai/Faux
+      for (const qName in quizAnswers) {
+          const radios = document.getElementsByName(qName);
+          let selectedValue = null;
+          for (const radio of radios) { if (radio.checked) { selectedValue = radio.value; break; } }
+          const fb = document.getElementById(qName + '-fb');
+          if (selectedValue) {
+              if (selectedValue === quizAnswers[qName]) {
+                  let expl = '👍 Bonne réponse !';
+                   if(qName === 'qz5') expl += ' Vrai, la DSN a remplacé la majorité des déclarations périodiques.';
+                   if(qName === 'qz6') expl += ' Faux, les erreurs impactent aussi les droits des salariés.';
+                   if(qName === 'qz7') expl += ' Faux, le contrôle humain reste indispensable.';
+                   if(qName === 'qz8') expl += ' Faux, les signalements ont des délais spécifiques (souvent 5 jours ouvrés).';
+                  feedback(fb.id, expl, true);
+              } else {
+                  feedback(fb.id, '👎 Incorrect.', false);
+              }
+          } else {
+              feedback(fb.id, 'Veuillez sélectionner une réponse.', false);
+          }
+      }
 
-                if (selectedValue === q.answer) {
-                    feedbackDiv.textContent = 'Correct ! ✨ Vous maîtrisez ce concept.';
-                    feedbackDiv.className = 'quiz-feedback feedback-correct';
-                } else {
-                    feedbackDiv.textContent = 'Incorrect. Revoyez ce point pour renforcer votre expertise.';
-                    feedbackDiv.className = 'quiz-feedback feedback-incorrect';
-                     allCorrect = false;
-                }
-            });
-             // Ajuster la hauteur de la section si elle est ouverte après affichage du feedback
-            const contentSection = button.closest('.infographic-content');
-            if (contentSection && contentSection.classList.contains('open')) {
-                 setTimeout(() => {
-                    contentSection.style.maxHeight = contentSection.scrollHeight + "px";
-                 }, 50); // Petit délai pour laisser le feedback s'afficher
-            }
-        }
+      // Cas pratique 9
+      const case9Answer = document.getElementById('qz9-answer').value.toLowerCase();
+      const case9Fb = document.getElementById('qz9-fb');
+      if ((case9Answer.includes('analyser') || case9Answer.includes('comprendre')) && case9Answer.includes('crm') && (case9Answer.includes('corriger') || case9Answer.includes('rectifier')) && (case9Answer.includes('dsn') || case9Answer.includes('déclaration'))) {
+          feedback(case9Fb.id, "👍 Très bien ! La priorité est d'analyser le CRM pour comprendre l'anomalie, de corriger les données dans le logiciel de paie et de renvoyer une DSN 'annule et remplace' ou corrective rapidement. Le risque est le rejet de la DSN et des pénalités.", true);
+      } else {
+          feedback(case9Fb.id, "👎 Réponse incomplète. Il fallait mentionner l'analyse du CRM, la correction et la retransmission rapide de la DSN pour éviter les pénalités.", false);
+      }
 
-         // Initialisation pour s'assurer que le premier onglet est actif au chargement si besoin
-         document.addEventListener('DOMContentLoaded', () => {
-             document.querySelectorAll('.infographic-content').forEach(content => {
-                 const firstTab = content.querySelector('.interactive-tab');
-                 if (firstTab) {
-                     const panelId = firstTab.getAttribute('onclick').match(/showPanel\(event, '(.*?)'\)/)[1];
-                     const panel = document.getElementById(panelId);
-                     if (panel && firstTab.classList.contains('active')) {
-                         panel.classList.add('active');
-                     }
-                 }
-             });
-             // S'assurer que le quiz final est ouvert par défaut si nécessaire
-             // Correction: Utilisation de l'ID ajouté à la carte du quiz final
-             const finalQuizCard = document.getElementById('final-quiz-card');
-              if (finalQuizCard) {
-                 const finalQuizContent = finalQuizCard.querySelector('.infographic-content');
-                  if (finalQuizContent && finalQuizContent.classList.contains('open')) {
-                      setTimeout(() => { // Ensure height calculation after potential rendering delays
-                         finalQuizContent.style.maxHeight = finalQuizContent.scrollHeight + "px";
-                     }, 100);
-                  }
-             }
-         });
-
-    </script>
-
+      // Cas pratique 10
+      const case10Answer = document.getElementById('qz10-answer').value.toLowerCase();
+      const case10Fb = document.getElementById('qz10-fb');
+      if ((case10Answer.includes('montant') || case10Answer.includes('valeur')) && case10Answer.includes('réduction générale') && (case10Answer.includes('dsn') || case10Answer.includes('cotisation agrégée') || case10Answer.includes('ctp'))) {
+          feedback(case10Fb.id, "👍 Exact ! Vous utiliserez principalement le montant total de la Réduction Générale calculé par salarié et agrégé au niveau de l'entreprise, tel qu'il est déclaré dans la DSN (souvent via un Code Type de Personnel - CTP spécifique).", true);
+      } else {
+          feedback(case10Fb.id, "👎 Réponse incomplète. Il fallait citer le montant de la Réduction Générale, disponible dans les données de paie et agrégé dans la DSN.", false);
+      }
+  }
+</script>
 </body>
 </html>
 
